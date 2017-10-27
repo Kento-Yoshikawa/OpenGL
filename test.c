@@ -1,6 +1,7 @@
 //テスト
 //床面,鳥居,竹の描画
 //これを調整
+//マウス関係を変更,これをテンプレにしてtexture mappingへ
 #include<stdio.h>
 #include<stdlib.h>
 #include<GL/glut.h>
@@ -14,7 +15,7 @@ GLfloat light0pos[] = { 20.0, 0.0, 5.0, 1.0 };
 GLfloat light1pos[] = { 5.0, 3.0, 0.0, 1.0 };
 
 
-int r=0;//回転角
+
 float view_x,view_y,view_z,rx,ry;//視点の座標、視線の角度
 double width, height;
 
@@ -100,6 +101,7 @@ void drawTori(int x,int z){
 void display(){
 
   int x,z;
+  static int r=0;//回転角
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
  
   glLoadIdentity();
@@ -130,12 +132,15 @@ void display(){
    for(z=-100;z<=6;z++){
 	drawTori(-1,z);
   }
-
+   if (++r >= 360) r = 0;
    glutSwapBuffers();
 }
 
 void resize(int w, int h)
 { 
+
+  width = w;
+  height = h;
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -148,6 +153,7 @@ void resize(int w, int h)
 }
 
 void idle(){
+
 
 	glutPostRedisplay();
 }
@@ -175,7 +181,6 @@ double yRotatex(int y) {
 void mouseMoved(int x, int y) {
 	ry = xRotatey(x);
 	rx = yRotatex(y);
-
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -189,13 +194,14 @@ void keyboard(unsigned char key, int x, int y)
     exit(0);
     break;
 
-  case 'r':
-  case 'R':
+//d,Dキーで下方向へ
+  case 'd':
+  case 'D':
      view_y += step;
      break;
-
-  case 'f':
-  case 'F':
+//u,Uキーで上方向へ
+  case 'u':
+  case 'U':
       view_y -= step;
 	break;
 
@@ -219,6 +225,15 @@ void specialKey(int key, int x, int y){
  		 view_z += step*cos(radians(ry));
 		 view_x -= step*sin(radians(ry));
 	  break;
+
+         case GLUT_KEY_LEFT:
+   		view_z -= step*sin(radians(ry));
+    		view_x -= step*cos(radians(ry));
+         break;
+          case GLUT_KEY_RIGHT:
+		view_z += step*sin(radians(ry));
+    		view_x += step*cos(radians(ry));
+          break;
 	 default:
 	   break;
 	} 
@@ -246,8 +261,8 @@ int main(int argc, char* argv[]){
 	
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
-	glutPassiveMotionFunc(mouseMoved);	
-	glutMotionFunc(mouseDraged);
+	//glutPassiveMotionFunc(mouseMoved);	
+	//glutMotionFunc(mouseDraged);
 	glutIdleFunc(idle);
 	glutSpecialFunc(specialKey);
 	glutReshapeFunc(resize); 
