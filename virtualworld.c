@@ -7,8 +7,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-
-
 GLfloat Scene[] = { (float)25 / 255,(float)25 / 255,(float)112 / 255,1.0 };//ウィンドウ全体の色 midnight blue
 GLfloat Ground[] = { (float)165 / 255,(float)42 / 255, (float)42 / 255, 1.0 };//地面の色 brown
 GLfloat Bamboo[] = { (float)34 / 255, (float)139 / 255, (float)34 / 255, 1.0 };//竹藪の色 forestgreen
